@@ -41,4 +41,4 @@ def post_data_to_another_url(data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Run Flask app
+    app.run(debug=True, host='0.0.0.0')  # Run Flask app
