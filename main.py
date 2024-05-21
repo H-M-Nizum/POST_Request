@@ -21,7 +21,7 @@ def post_data_to_another_url(data):
     print(data)
     
     # Define the URL to post the data to
-    url = 'https://demo15.ionicerp.xyz/api/resource/benner'
+    url = f"https://{data['server']}.ionicerp.xyz/api/resource/{data['doctype']}"
 
     try:
         headers = {
@@ -32,7 +32,7 @@ def post_data_to_another_url(data):
     #     # Post the data to the other URL
     #     # response = requests.post(another_url, json=data)
         response = requests.post(url, json=data, headers=headers)
-        response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
+        response.raise_for_status() 
         print('Data posted to another URL successfully')
         print(response)
     except requests.exceptions.RequestException as e:
@@ -41,4 +41,4 @@ def post_data_to_another_url(data):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')  # Run Flask app
+    app.run(debug=True, host='0.0.0.0')  
