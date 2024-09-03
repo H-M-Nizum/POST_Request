@@ -15,4 +15,4 @@
 
   ## Base URL
 
-[https://digital-medical-services.onrender.com/](https://post-request.onrender.com/)
+[https://post-request.onrender.com](https://post-request.onrender.com/)
