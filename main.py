@@ -53,8 +53,7 @@ def get_all_documents():
     print(len(data["data"][0]))
     return jsonify(data)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
     
     
 # ----------------------------------------------------------------- POST data any Panal & any Doctype-----------------------------------------
@@ -88,4 +87,7 @@ def post_data_to_another_url(data):
         response = f"""'Error posting data to another URL:', {e}"""
         # response.raise_for_status() 
         print('Error posting data to another URL:', e)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
