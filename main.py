@@ -5,12 +5,16 @@ import requests
 import json
 
 
+# const SITE_URL = "https://ecommerce.ionicerp.xyz";
+# const API_SECRET = "02fbdaed78fefbb";
+# const API_KEY = "84859bedced40f4";
+# ---------------------------------------------------------------------- Get All Item Based ON Group ---------------------------------------------------
 def fetch_data(param):
-    url = f"""https://erp.gawsiashop.com.bd/api/resource/Item?filters=[["item_group", "=", "{param}"]]&fields=["*"]&limit_page_length=99"""
+    url = f"""https://ecommerce.ionicerp.xyz/api/resource/Item?filters=[["item_group", "=", "{param}"]]&fields=["*"]&limit_page_length=99"""
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : "token 092867a6814bfc7:bcc0df87d4b1a77"
+        "Authorization" : "token 84859bedced40f4:02fbdaed78fefbb"
     }
     payload = {
         "param1": param
@@ -34,24 +38,33 @@ def get_document():
     return jsonify(data)
 
 
-#----------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------- Get All Item Group ---------------------------------------------------------------------
 def fetch_all_data():
-    url = f"""https://erp.gawsiashop.com.bd/api/resource/Item Group?fields=["*"]&limit_page_length=99"""
+    url = f"""https://ecommerce.ionicerp.xyz/api/resource/Item Group?fields=["*"]&limit_page_length=99"""
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : "token 092867a6814bfc7:bcc0df87d4b1a77"
+        "Authorization" : "token 84859bedced40f4:02fbdaed78fefbb"
     }
     # Assuming you want to use param1 and param2 in the request
     response = requests.get(url, headers=headers)
-    return response.json()
+    # Check if the response was successful
+    if response.status_code == 200:
+        return response.json()
+    else:
+        # Return an empty dictionary or handle the error as needed
+        return {"error": "Failed to fetch data", "status_code": response.status_code}
 
 @app.route('/getall', methods=['GET'])
 def get_all_documents():
+    data1 = fetch_all_data()
     
-    data = fetch_all_data()
-    print(len(data["data"][0]))
-    return jsonify(data)
+    # Check if the 'data' key exists in the response
+    if 'data' in data1:
+        return jsonify(data1)
+    else:
+        # Handle the case where 'data' key is missing
+        return jsonify({"error": "No data found", "response": data1})
 
 
     
@@ -90,4 +103,3 @@ def post_data_to_another_url(data):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
