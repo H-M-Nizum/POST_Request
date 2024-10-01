@@ -38,26 +38,33 @@ def get_document():
     return jsonify(data)
 
 
-#------------------------------------------------------- Get All Item Group ---------------------------------------------------------------------
-def fetch_all_data():
-    url = f"""https://ecommerce.ionicerp.xyz/api/resource/Item Group?fields=["*"]&limit_page_length=99"""
+#------------------------------------------------------- Get All ALl type of doctype data ---------------------------------------------------------------------
+def fetch_all_data(doctype_name):
+    url = f"https://ecommerce.ionicerp.xyz/api/resource/{doctype_name}?fields=[\"*\"]&limit_page_length=99"
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : "token 84859bedced40f4:02fbdaed78fefbb"
+        "Authorization": "token 84859bedced40f4:02fbdaed78fefbb"
     }
-    # Assuming you want to use param1 and param2 in the request
+    
     response = requests.get(url, headers=headers)
+    
     # Check if the response was successful
     if response.status_code == 200:
         return response.json()
     else:
-        # Return an empty dictionary or handle the error as needed
+        # Return an error message with status code
         return {"error": "Failed to fetch data", "status_code": response.status_code}
 
 @app.route('/getall', methods=['GET'])
 def get_all_documents():
-    data1 = fetch_all_data()
+    # Get the doctype name from query parameters
+    doctype_name = request.args.get('doctype_name')
+    
+    if not doctype_name:
+        return jsonify({"error": "Missing doctype_name parameter"}), 400
+    
+    data1 = fetch_all_data(doctype_name)
     
     # Check if the 'data' key exists in the response
     if 'data' in data1:
@@ -65,6 +72,7 @@ def get_all_documents():
     else:
         # Handle the case where 'data' key is missing
         return jsonify({"error": "No data found", "response": data1})
+    
 
 
     
