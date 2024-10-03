@@ -32,7 +32,7 @@
 }
 ```
 ---------------------------------------------------------------------------------------------------
-4. Post request Sales order - /receive_data
+4. Post request Sales order - /post_data
 ```
  {
   "server": "Panal URL",
