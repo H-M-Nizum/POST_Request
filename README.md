@@ -8,12 +8,13 @@
 ## End Point
 --------------------------------------------------------------------------------------------------
 1. Get APi key & Secrate Key :-  /getapisecrate
-```Body = {"param": "Panal URL"}```
+Body -
+```{"param": "Panal URL"}```
 
 --------------------------------------------------------------------------------------------------
 2. Get item, based on item Group - /groupitems
+Body -
 ```
-Body = 
 {
   "erp_url" : "Panal URL",
   "group_name": "Item Group"
@@ -21,8 +22,8 @@ Body =
 ```
 ---------------------------------------------------------------------------------------------------
 3. Get all type of doctype data - /getall
+Body -
 ```
-Body = 
 {
   "erp_url" : "Panal URL",
   "doctype_name": "Doctype name"
@@ -30,6 +31,7 @@ Body =
 ```
 ---------------------------------------------------------------------------------------------------
 4. Post request Sales order - /receive_data
+Body -
 ```
  {
   "server": "Panal URL",
