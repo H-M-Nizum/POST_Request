@@ -56,5 +56,29 @@
 
 }
 ```
+---------------------------------------------------------------------------------------------------
+4. Update Any DocType Document - /put_data
+
+```
+{
+  "erp_url" : "Panal URL",
+  "doctype_name": "Doctype Name",
+  "document_name" : "Document Name or ID",
+  "data": {
+        Document Data 
+   }
+}
+```
+
+---------------------------------------------------------------------------------------------------
+4. Delete Any DocType Document - /delete_data
+
+```
+{
+  "erp_url" : "Panal URL",
+  "doctype_name": "Doctype Name",
+  "document_name" : "Document Name or ID"
+}
+```
 
 
