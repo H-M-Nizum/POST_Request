@@ -57,7 +57,7 @@
 }
 ```
 ---------------------------------------------------------------------------------------------------
-4. Update Any DocType Document -  $${\color{blue}POST}$$ - /put_data
+4. Update Any DocType Document -  $${\color{blue}PUT}$$ - /put_data
 
 ```
 {
@@ -71,7 +71,7 @@
 ```
 
 ---------------------------------------------------------------------------------------------------
-4. Delete Any DocType Document -  $${\color{red}POST}$$ - /delete_data
+4. Delete Any DocType Document -  $${\color{red}DELETE}$$ - /delete_data
 
 ```
 {
