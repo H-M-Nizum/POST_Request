@@ -16,7 +16,7 @@
 ```
 
 --------------------------------------------------------------------------------------------------
-2. Get item, based on item Group - /groupitems
+2. Get item, based on item Group - <span style="color: green;">GET</span> -  /groupitems
 ```
 {
   "erp_url" : "Panal URL",
