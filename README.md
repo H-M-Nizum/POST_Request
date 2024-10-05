@@ -80,5 +80,42 @@
   "document_name" : "Document Name or ID"
 }
 ```
+-----------------------------------------------------------------------------------------------------
+5. SignUp  - /signup
+```
+{
+  "erp_url" : "base url",
+  "erp_data" : {
+    "email": "Ionic@gmail.com",
+    "first_name": "name",
+    "full_name": "full name",
+    "password": "password",
+    "redirect_to": "/app"
+}
+}
+
+
+```
+-----------------------------------------------------------------------------------------------------
+6. Login  - /login
+
+```
+{
+  "erp_url" : "https://ecommerce.ionicerp.xyz",
+  "erp_data" : {
+        "usr": "username",
+        "pwd": "password"
+    }
+}
+
+```
+------------------------------------------------------------------------------------------------------
+7. Logout - /logout
+
+```
+{
+  "erp_url" : "base url"
+}
+```
 
 
