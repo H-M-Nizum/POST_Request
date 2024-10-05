@@ -310,38 +310,69 @@ def signin():
     erp_url = data.get('erp_url')
     erp_data = data.get('erp_data')
     url = f"{erp_url}/api/method/login"
+    try:
+        response = requests.post(url, json=erp_data)  # use json= for JSON data
+        print(response)
 
-    response = requests.post(url, data=erp_data)
+        if response.status_code == 200:
+            print("Login successful!")
+            session_cookies = response.cookies
+            return {
+                "status": "success",
+                "data": response.json(),  # Return the JSON response from the server
+                "cookies": session_cookies.get_dict()  # Optionally return the cookies
+            }
+        else:
+            print(f"Login failed: {response.status_code} - {response.text}")
+            return {
+                "status": "error",
+                "message": response.text,
+                "status_code": response.status_code
+            }, response.status_code
 
-    if response.status_code == 200:
-        print("Login successful!")
-
-        session_cookies = response.cookies
-    else:
-        print(f"Login failed: {response.status_code} - {response.text}")
-        
-    return data
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return {
+            "status": "error",
+            "message": "An error occurred while trying to login.",
+            "error": str(e)
+        }, 500
 
 
 @app.route('/logout', methods=['POST'])
-def Logout():
+def signout():
     data = request.json  
-    # print('data ', data)
     erp_url = data.get('erp_url')
     url = f"{erp_url}/api/method/logout"
-
-    session_cookies = { 
-        'sid': 'your_session_id'  # Replace with actual session cookie
-    }
-
-    response = requests.post(url, cookies=session_cookies)
-
-    if response.status_code == 200:
-        print("Logout successful!")
-    else:
-        print(f"Logout failed: {response.status_code} - {response.text}")
+    
+    try:
+        session_cookies = data.get('cookies')  # Get cookies from the request data if needed
         
-    return data
+        response = requests.post(url, cookies=session_cookies)  # Pass cookies if required
+        print(response)
+
+        if response.status_code == 200:
+            print("Logout successful!")
+            return {
+                "status": "success",
+                "message": "User logged out successfully."
+            }
+        else:
+            print(f"Logout failed: {response.status_code} - {response.text}")
+            return {
+                "status": "error",
+                "message": response.text,
+                "status_code": response.status_code
+            }, response.status_code
+
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return {
+            "status": "error",
+            "message": "An error occurred while trying to logout.",
+            "error": str(e)
+        }, 500
+
 
 
 
