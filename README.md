@@ -7,7 +7,7 @@
 
 ## End Point
 --------------------------------------------------------------------------------------------------
-1. Get APi key & Secrate Key :-  /getapisecrate
+1. Get APi key & Secrate Key :- $${\color{green}GET}$$ -   /getapisecrate
    
 ```
 {
@@ -24,7 +24,7 @@
 }
 ```
 ---------------------------------------------------------------------------------------------------
-3. Get all type of doctype data - /getall
+3. Get all type of doctype data - $${\color{green}GET}$$ - /getall
 ```
 {
   "erp_url" : "Panal URL",
@@ -32,7 +32,7 @@
 }
 ```
 ---------------------------------------------------------------------------------------------------
-4. Post request Sales order - /post_data
+4. Post request Sales order -  $${\color{yellow}POST}$$ -  /post_data
 ```
  {
   "server": "Panal URL",
@@ -57,7 +57,7 @@
 }
 ```
 ---------------------------------------------------------------------------------------------------
-4. Update Any DocType Document - /put_data
+4. Update Any DocType Document -  $${\color{blue}POST}$$ - /put_data
 
 ```
 {
@@ -71,7 +71,7 @@
 ```
 
 ---------------------------------------------------------------------------------------------------
-4. Delete Any DocType Document - /delete_data
+4. Delete Any DocType Document -  $${\color{red}POST}$$ - /delete_data
 
 ```
 {
@@ -81,7 +81,7 @@
 }
 ```
 -----------------------------------------------------------------------------------------------------
-5. SignUp  - /signup
+5. SignUp  -  $${\color{yellow}POST}$$ - /signup
 ```
 {
   "erp_url" : "base url",
@@ -97,7 +97,7 @@
 
 ```
 -----------------------------------------------------------------------------------------------------
-6. Login  - /login
+6. Login  -  $${\color{yellow}POST}$$ - /login
 
 ```
 {
@@ -110,7 +110,7 @@
 
 ```
 ------------------------------------------------------------------------------------------------------
-7. Logout - /logout
+7. Logout -  $${\color{yellow}POST}$$ - /logout
 
 ```
 {
