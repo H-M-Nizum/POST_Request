@@ -96,7 +96,11 @@ def fetch_data(erp_url, group_name):
     else:
         return {"error": "Your panel is not registered"}
     
- 
+    # Safely encode the group_name in the URL
+    print(erp_url, group_name)
+    if '*' in group_name:
+        group_name = group_name.replace('*', '&')
+    print(erp_url, group_name)
     
     url = f"""{erp_url}/api/resource/Item?filters=[["item_group", "=", "{group_name}"]]&fields=["*"]&limit_page_length=99"""
     # url = "https://ecommerce.ionicerp.xyz/api/resource/Item?filters=[['item_group', '=', 'Fish & Meat']]&fields=['*']&limit_page_length=99"
@@ -146,6 +150,11 @@ def get_document():
     else:
         # Handle the case where 'data' key is missing or empty
         return jsonify({"error": "No data found", "response": data})
+
+
+
+    
+
 
 
     
