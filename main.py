@@ -69,9 +69,8 @@ def fetch_all_data(erp_url, doctype_name):
 
 @app.route('/getall', methods=['GET'])
 def get_all_documents():
-    data = request.json
-    erp_url = data.get('erp_url')
-    doctype_name = data.get('doctype_name')  # Replace 'param' with the actual key you expect in the body
+    erp_url = request.args.get('erp_url')
+    doctype_name = request.args.get('doctype_name')  # Replace 'param' with the actual key you expect in the body
     
     if not doctype_name or not erp_url:
         return jsonify({"error": "Missing doctype_name or erp_url parameter"}), 400
