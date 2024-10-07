@@ -26,10 +26,7 @@
 ---------------------------------------------------------------------------------------------------
 3. Get all type of doctype data - $${\color{green}GET}$$ - /getall
 ```
-{
-  "erp_url" : "Panal URL",
-  "doctype_name": "Doctype name"
-}
+http://127.0.0.1:5000/getall?erp_url=erp_url&doctype_name=doctype_name
 ```
 ---------------------------------------------------------------------------------------------------
 4. Post request Sales order -  $${\color{yellow}POST}$$ -  /post_data
