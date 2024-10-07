@@ -86,25 +86,35 @@ def get_all_documents():
 
 
 # ---------------------------------------------------------------------- Get All Item Based ON Group ---------------------------------------------------
-def fetch_data(group_name,erp_url):
+def fetch_data(erp_url, group_name):
     panal_data = fetch_API_Secrate_Key(f"{erp_url}")
-    # print(panal_data)
+    print(panal_data)
     if panal_data['data']:
         panal_url = panal_data['data'][0]['apps_url']
         panal_api_key = panal_data['data'][0]['api_key']
         panal_secrate_key = panal_data['data'][0]['secret_key']
     else:
-        return {"error": "Your panal is not registed"}
+        return {"error": "Your panel is not registered"}
     
-    url = f"""{panal_url}/api/resource/Item?filters=[["item_group", "=", "{group_name}"]]&fields=["*"]&limit_page_length=99"""
+ 
+    
+    url = f"""{erp_url}/api/resource/Item?filters=[["item_group", "=", "{group_name}"]]&fields=["*"]&limit_page_length=99"""
+    # url = "https://ecommerce.ionicerp.xyz/api/resource/Item?filters=[['item_group', '=', 'Fish & Meat']]&fields=['*']&limit_page_length=99"
+    print(url)
     headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Authorization" : f"token {panal_api_key}:{panal_secrate_key}"
+        "Authorization": f"token {panal_api_key}:{panal_secrate_key}"
     }
+    print(headers)
+ 
     response = requests.get(url, headers=headers)
+    # response = requests.get(url, headers=headers)
+    print(response)
     # Check if the response was successful
     if response.status_code == 200:
+   
+        print(response.json())
         return response.json()
     else:
         # Return an error message with status code
@@ -112,19 +122,30 @@ def fetch_data(group_name,erp_url):
 
 @app.route('/groupitems', methods=['GET'])
 def get_document():
-    data = request.json
-    group_name = data.get('group_name')  # Replace 'group_name' with the actual key you expect in the body
-    erp_url = data.get('erp_url')
+    erp_url = request.args.get('erp_url')
+    group_name = request.args.get('group_name')
+    # URL-encode the group_name to handle special characters
     
-    # Accessing param2 from query string
-    if not group_name or not erp_url:
-        return jsonify({"error": "Missing doctype_name or erp_url parameter"}), 400
-    
-    data = fetch_data(group_name, erp_url)
-    if not data['data']:
-        return jsonify({"error": "No data found"}), 404
-    return jsonify(data)
+        # Safely encode the group_name in the URL
+    print(erp_url, group_name)
 
+    # Check for missing parameters
+    if not group_name or not erp_url:
+        return jsonify({"error": "Missing group_name or erp_url parameter"}), 400
+    
+    if '*' in group_name:
+        group_name = group_name.replace('*', '&')
+    print(erp_url, group_name)
+    encoded_group_name = quote(group_name)
+    
+    data = fetch_data(erp_url, encoded_group_name)
+    
+    # Check if the 'data' key exists in the response
+    if 'data' in data and data['data']:
+        return jsonify(data)
+    else:
+        # Handle the case where 'data' key is missing or empty
+        return jsonify({"error": "No data found", "response": data})
 
 
     
