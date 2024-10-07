@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 import requests
 import json
-
+from requests.utils import quote
 
 app = Flask(__name__)
 CORS(app) 
