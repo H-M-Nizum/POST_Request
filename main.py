@@ -83,6 +83,64 @@ def get_all_documents():
         # Handle the case where 'data' key is missing
         return jsonify({"error": "No data found", "response": data1})
 
+def fetch_all_data1(erp_url, doctype_name, filters=None):
+    panal_data = fetch_API_Secrate_Key(f"{erp_url}")
+    print(panal_data)
+    if panal_data['data']:
+        panal_url = panal_data['data'][0]['apps_url']
+        panal_api_key = panal_data['data'][0]['api_key']
+        panal_secrate_key = panal_data['data'][0]['secret_key']
+    else:
+        return {"error": "Your panal is not registered"}
+
+    # Build the base URL
+    url = f"{erp_url}/api/resource/{doctype_name}?fields=[\"*\"]&limit_page_length=99"
+    
+    # Add filters if provided
+    if filters:
+        # filters=[["field1", "=", "value1"]]
+        filter_string = '&'.join([f"""filters=[["{key}", "=", "{value}"]]""" for key, value in filters.items()])
+        url += f"&{filter_string}"
+    print("url = ", url)
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"token {panal_api_key}:{panal_secrate_key}"
+    }
+    
+    response = requests.get(url, headers=headers)
+    # Check if the response was successful
+    if response.status_code == 200:
+        return response.json()
+    else:
+        # Return an error message with status code
+        return {"error": "Failed to fetch data", "status_code": response.status_code}
+
+@app.route('/getall1', methods=['GET'])
+def get_all_documents1():
+    erp_url = request.args.get('erp_url')
+    doctype_name = request.args.get('doctype_name')
+    
+    if not doctype_name or not erp_url:
+        return jsonify({"error": "Missing doctype_name or erp_url parameter"}), 400
+    
+    # Get filter parameters from the request
+    filters = request.args.get('filters')
+    filters_dict = {}
+    if filters:
+        try:
+            filters_dict = json.loads(filters)  # Assuming filters are passed as a JSON string
+        except json.JSONDecodeError:
+            return jsonify({"error": "Invalid filters format"}), 400
+
+    data1 = fetch_all_data1(erp_url, doctype_name, filters_dict)
+    # Check if the 'data' key exists in the response
+    if 'data' in data1:
+        return jsonify(data1)
+    else:
+        # Handle the case where 'data' key is missing
+        return jsonify({"error": "No data found", "response": data1})
+
 
 
 # ---------------------------------------------------------------------- Get All Item Based ON Group ---------------------------------------------------
