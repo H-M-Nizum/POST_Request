@@ -25,8 +25,15 @@
 ```
 ---------------------------------------------------------------------------------------------------
 3. Get all type of doctype data - $${\color{green}GET}$$ - /getall
+
+   
+Without Filttering
 ```
 http://127.0.0.1:5000/getall?erp_url=erp_url&doctype_name=doctype_name
+```
+with Filttering
+```
+https://erp-backend-xkze.vercel.app//getall?erp_url=https://ecommerce.ionicerp.xyz&doctype_name=Company&filters={"company_name":"IONIC Pharma"}
 ```
 ---------------------------------------------------------------------------------------------------
 4. Post request Sales order -  $${\color{yellow}POST}$$ -  /post_data
