@@ -8,6 +8,7 @@ from requests.utils import quote
 app = Flask(__name__)
 CORS(app) 
 
+
 #--------------------------------------- Get API key & Secrate key from mht.ionicerp.xyz--------------------
 def fetch_API_Secrate_Key(api_url):
     url = f"""https://mht.ionicerp.xyz/api/resource/IONIC APPS Registration?filters=[["apps_url", "=", "{api_url}"]]&fields=["company_name", "apps_url", "api_key", "secret_key"]&limit_page_length=99"""
@@ -67,7 +68,7 @@ def fetch_all_data(erp_url, doctype_name):
         # Return an error message with status code
         return {"error": "Failed to fetch data", "status_code": response.status_code}
 
-@app.route('/getall', methods=['GET'])
+@app.route('/getall1', methods=['GET'])
 def get_all_documents():
     erp_url = request.args.get('erp_url')
     doctype_name = request.args.get('doctype_name')  # Replace 'param' with the actual key you expect in the body
@@ -83,6 +84,9 @@ def get_all_documents():
         # Handle the case where 'data' key is missing
         return jsonify({"error": "No data found", "response": data1})
 
+
+
+#---------------------------------------- With Filtering -------------------------------------
 def fetch_all_data1(erp_url, doctype_name, filters=None):
     panal_data = fetch_API_Secrate_Key(f"{erp_url}")
     print(panal_data)
@@ -116,7 +120,7 @@ def fetch_all_data1(erp_url, doctype_name, filters=None):
         # Return an error message with status code
         return {"error": "Failed to fetch data", "status_code": response.status_code}
 
-@app.route('/getall1', methods=['GET'])
+@app.route('/getall', methods=['GET'])
 def get_all_documents1():
     erp_url = request.args.get('erp_url')
     doctype_name = request.args.get('doctype_name')
@@ -143,6 +147,98 @@ def get_all_documents1():
 
 
 
+#######################################################################################################################
+@app.route("/", methods=["GET"])
+def home():
+    return "Hello Ionic Corporation"
+
+@app.route("/gets/<doctype>", methods=["GET"])
+def get_documents(doctype):
+    filters = request.args.get("filters", default="{}", type=str)
+    fields = request.args.get("fields", default="[]", type=str)
+    erp_url = request.args.get("erp_url", default="", type=str)  # Get erp_url from query params
+    
+    panal_data = fetch_API_Secrate_Key(f"{erp_url}")
+    print(panal_data)
+    if panal_data['data']:
+        panal_url = panal_data['data'][0]['apps_url']
+        panal_api_key = panal_data['data'][0]['api_key']
+        panal_secrate_key = panal_data['data'][0]['secret_key']
+    else:
+        return {"error": "Your panal is not registered"}
+    try:
+        parsed_filters = json.loads(filters)
+        parsed_fields = json.loads(fields)
+
+        headers = {
+            "Authorization": f"token {panal_api_key}:{panal_secrate_key}",
+            "Content-Type": "application/json"
+        }
+
+        response = requests.get(
+            f"{erp_url}/api/resource/{doctype}",  # Use erp_url here
+            headers=headers,
+            params={"filters": json.dumps(parsed_filters), "fields": json.dumps(parsed_fields)}
+        )
+        
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({"error": response.json()}), response.status_code
+
+    except Exception as err:
+        return jsonify({"error": str(err)}), 500
+
+
+#######################################################################################################################
+# ----------------------------------------------------------- Get Doctype SubTable Data -----------------------------------------
+def fetch_all_child_data(erp_url, doctype_name, child_table, name):
+    panal_data = fetch_API_Secrate_Key(f"{erp_url}")
+    print("panal_data = ", panal_data)
+    if panal_data['data']:
+        panal_url = panal_data['data'][0]['apps_url']
+        panal_api_key = panal_data['data'][0]['api_key']
+        panal_secrate_key = panal_data['data'][0]['secret_key']
+    else:
+        return {"error": "Your panal is not registed"}
+    
+    # url = f"{erp_url}/api/resource/{doctype_name}?fields=[\"*\"]&limit_page_length=99"
+    filters = json.dumps({"parent": f"{name}"})
+    # https://ecommerce.ionicerp.xyz/api/method/frappe.client.get_list?doctype=Sales Order Item&parent=Sales Order&fields=["*"]&filters={"parent":"2024-00203"}&page_length_limit=None
+    # url = f"{erp_url}/api/method/frappe.client.get_list?doctype={child_table}&fields=[\"*\"]&filters={filters}&page_length_limit=9999"
+    url = f"""{erp_url}/api/method/frappe.client.get_list?doctype={child_table}&parent={doctype_name}&fields=["*"]&filters={filters}&page_length_limit=9999"""
+    print('URL = ', url)
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization" : f"token {panal_api_key}:{panal_secrate_key}"
+    }
+    
+    response = requests.get(url, headers=headers)
+    # Check if the response was successful
+    if response.status_code == 200:
+        return response.json()
+    else:
+        # Return an error message with status code
+        return {"error": "Failed to fetch data", "status_code": response.status_code}
+
+@app.route('/getchildtable', methods=['GET'])
+def get_all_child_documents():
+    erp_url = request.args.get('erp_url')
+    doctype_name = request.args.get('doctype_name')
+    child_table = request.args.get('child_table')
+    name = request.args.get('name')
+    
+    if not doctype_name or not erp_url or not child_table:
+        return jsonify({"error": "Missing doctype_name or erp_url parameter"}), 400
+    
+    data1 = fetch_all_child_data(erp_url, doctype_name, child_table, name)
+    # Check if the 'data' key exists in the response
+    if data1:
+        return jsonify(data1)
+    else:
+        # Handle the case where 'data' key is missing
+        return jsonify({"error": "No data found", "response": data1})
 # ---------------------------------------------------------------------- Get All Item Based ON Group ---------------------------------------------------
 def fetch_data(erp_url, group_name):
     panal_data = fetch_API_Secrate_Key(f"{erp_url}")
